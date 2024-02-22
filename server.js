@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios'
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-const API_KEY = "RGAPI-2421bb48-67ed-4411-a6d0-4fcccf45700f"
-const API_URL = "https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-name/b%27R3flexone%27"
+const API_KEY = process.env.API_KEY
 
 async function fetchSummonerByName(name) {
     try {
