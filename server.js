@@ -57,6 +57,19 @@ const rateLimiterMiddleware = (req, res, next) => {
             console.log(`Rejecting request due to rate limiting.`)
             res.status(429).json('Too Many Requests')
         })
+    } else if (req.url.startsWith('/tokens')) {
+        rateLimiter
+        .consume("Api Points", 10)
+        .then(() => {
+            console.log("Consuming third midddleware")
+            // Allow request and consume 1 point.
+            next()
+        })
+        .catch(() => {
+            // Not enough points. Block the request.
+            console.log(`Rejecting request due to rate limiting.`)
+            res.status(429).json('Too Many Requests')
+        })
     } else {
         next()
     }
