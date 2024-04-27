@@ -287,8 +287,8 @@ app.get('/', (req, res) => {
 
 // Define a sample route
 app.get('/tokens', async (req, res) => {
-    //rateLimiter.consume(1)
-    res.json('Hello from tokens page!');
+    rateLimiter.consume(10)
+    res.json('Hello from tokens page! consuming 10 rates');
 });
 
 // heavy on api, probably problems with api throttling
