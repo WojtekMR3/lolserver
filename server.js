@@ -24,8 +24,8 @@ const servers = [
 //   });
 // LOL API Official limit: 100r/2mins n 20r/s
 const opts = {
-    points: 100, // Point budget.
-    duration: 120 // Reset points consumption every 60 sec.
+    points: 40, // Point budget.
+    duration: 30 // Reset points consumption every 60 sec.
 }
 const rateLimiter = new RateLimiterMemory(opts)
 
