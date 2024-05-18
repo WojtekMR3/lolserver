@@ -302,16 +302,12 @@ function regionToContinent(region) {
 
 // Enable CORS middleware
 const corsOptions = {
-    origin: 'https://lolvue.vercel.app/',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    optionsSuccessStatus: 204
-  };
-  
+    origin: 'https://lolvue.vercel.app/'
+};
+
 app.use(cors(corsOptions));
 
-app.options('*', cors(corsOptions)); // Enable pre-flight across-the-board
+//app.options('*', cors(corsOptions)); // Enable pre-flight across-the-board
 
 // Define a sample route
 app.get('/', (req, res) => {
