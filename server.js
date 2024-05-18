@@ -18,116 +18,126 @@ const servers = [
 ];
 // Define rate limiting options
 // const limiter = rateLimit({
-//     windowMs: 1000, // 1 second
-//     max: 99, // limit each IP to 5 requests per windowMs
+//     windowMs: 20 * 1000, // 1 second
+//     max: 5, // limit each IP to 5 requests per windowMs
 //     message: 'Too many requests from this IP, please try again later',
 //   });
+// app.use(limiter);
+
+const limiterFlexible = new RateLimiterMemory({
+    points: 20,
+    duration: 20,
+  });
+  
+const limiterQueue = new RateLimiterQueue(limiterFlexible, {
+    maxQueueSize: 40,
+});
+
 // LOL API Official limit: 100r/2mins n 20r/s
-const opts = {
-    points: 40, // Point budget.
-    duration: 30 // Reset points consumption every 60 sec.
-}
-const rateLimiter = new RateLimiterMemory(opts)
+// const opts = {
+//     points: 40, // Point budget.
+//     duration: 30 // Reset points consumption every 60 sec.
+// }
+// const rateLimiter = new RateLimiterMemory(opts)
 
-const rateLimiterMiddleware = (req, res, next) => {
-// Rate limiting only applies to the /tokens route.
-    if (req.url.startsWith('/summonerRank')) {
-        rateLimiter
-        .consume(req.connection.remoteAddress, 3)
-        .then(() => {
-            //console.log("Inc traffic: " + req.connection.remoteAddress)
-            // Allow request and consume 1 point.
-            next()
-        })
-        .catch(() => {
-            // Not enough points. Block the request.
-            console.log(`Rejecting request due to rate limiting.`)
-            res.status(429).json('Too Many Requests')
-        })
-    } else if (req.url.startsWith('/matchHistory')) {
-        rateLimiter
-        .consume("Api Points", 12)
-        .then(() => {
-            console.log("Consuming first midddleware")
-            // Allow request and consume 1 point.
-            next()
-        })
-        .catch(() => {
-            // Not enough points. Block the request.
-            console.log(`Rejecting request due to rate limiting.`)
-            res.status(429).json('Too Many Requests')
-        })
-    } else if (req.url.startsWith('/tokens')) {
-        rateLimiter
-        .consume("Api Points", 10)
-        .then(() => {
-            console.log("Consuming third midddleware")
-            // Allow request and consume 1 point.
-            next()
-        })
-        .catch(() => {
-            // Not enough points. Block the request.
-            console.log(`Rejecting request due to rate limiting.`)
-            res.status(429).json('Too Many Requests')
-        })
-    } else {
-        next()
-    }
-}
+// const rateLimiterMiddleware = (req, res, next) => {
+// // Rate limiting only applies to the /tokens route.
+//     if (req.url.startsWith('/summonerRank')) {
+//         rateLimiter
+//         .consume(req.connection.remoteAddress, 3)
+//         .then(() => {
+//             //console.log("Inc traffic: " + req.connection.remoteAddress)
+//             // Allow request and consume 1 point.
+//             next()
+//         })
+//         .catch(() => {
+//             // Not enough points. Block the request.
+//             console.log(`Rejecting request due to rate limiting.`)
+//             res.status(429).json('Too Many Requests')
+//         })
+//     } else if (req.url.startsWith('/matchHistory')) {
+//         rateLimiter
+//         .consume("Api Points", 12)
+//         .then(() => {
+//             console.log("Consuming first midddleware")
+//             // Allow request and consume 1 point.
+//             next()
+//         })
+//         .catch(() => {
+//             // Not enough points. Block the request.
+//             console.log(`Rejecting request due to rate limiting.`)
+//             res.status(429).json('Too Many Requests')
+//         })
+//     } else if (req.url.startsWith('/tokens')) {
+//         rateLimiter
+//         .consume("Api Points", 10)
+//         .then(() => {
+//             console.log("Consuming third midddleware")
+//             // Allow request and consume 1 point.
+//             next()
+//         })
+//         .catch(() => {
+//             // Not enough points. Block the request.
+//             console.log(`Rejecting request due to rate limiting.`)
+//             res.status(429).json('Too Many Requests')
+//         })
+//     } else {
+//         next()
+//     }
+// }
 
-app.use(rateLimiterMiddleware)
+// app.use(rateLimiterMiddleware)
 
-const riotSecond = {
-    points: 20, // Point budget.
-    duration: 1 // Reset points consumption every 60 sec.
-}
-const rateLimiterSecond = new RateLimiterMemory(riotSecond)
+// const riotSecond = {
+//     points: 20, // Point budget.
+//     duration: 1 // Reset points consumption every 60 sec.
+// }
+// const rateLimiterSecond = new RateLimiterMemory(riotSecond)
+// const rateLimiterSecondMiddleware = (req, res, next) => {
+// // Rate limiting only applies to the /tokens route.
+//     if (req.url.startsWith('/summonerRank')) {
+//         rateLimiterSecond
+//         .consume(req.connection.remoteAddress, 3)
+//         .then(() => {
+//             //console.log("Inc traffic: " + req.connection.remoteAddress)
+//             // Allow request and consume 1 point.
+//             next()
+//         })
+//         .catch(() => {
+//             // Not enough points. Block the request.
+//             console.log(`Rejecting request due to rate limiting.`)
+//             res.status(429).json('Too Many Requests')
+//         })
+//     } else if (req.url.startsWith('/matchHistory')) {
+//         rateLimiterSecond
+//         .consume("Api Points", 15)
+//         .then(() => {
+//             console.log("Consuming second midddleware")
+//             // Allow request and consume 1 point.
+//             next()
+//         })
+//         .catch(() => {
+//             // Not enough points. Block the request.
+//             console.log(`Rejecting request due to rate limiting.`)
+//             res.status(429).json('Too Many Requests')
+//         })
+//     } else {
+//         next()
+//     }
+// }
 
-const rateLimiterSecondMiddleware = (req, res, next) => {
-// Rate limiting only applies to the /tokens route.
-    if (req.url.startsWith('/summonerRank')) {
-        rateLimiterSecond
-        .consume(req.connection.remoteAddress, 3)
-        .then(() => {
-            //console.log("Inc traffic: " + req.connection.remoteAddress)
-            // Allow request and consume 1 point.
-            next()
-        })
-        .catch(() => {
-            // Not enough points. Block the request.
-            console.log(`Rejecting request due to rate limiting.`)
-            res.status(429).json('Too Many Requests')
-        })
-    } else if (req.url.startsWith('/matchHistory')) {
-        rateLimiterSecond
-        .consume("Api Points", 15)
-        .then(() => {
-            console.log("Consuming second midddleware")
-            // Allow request and consume 1 point.
-            next()
-        })
-        .catch(() => {
-            // Not enough points. Block the request.
-            console.log(`Rejecting request due to rate limiting.`)
-            res.status(429).json('Too Many Requests')
-        })
-    } else {
-        next()
-    }
-}
-
-app.use(rateLimiterSecondMiddleware)
+// app.use(rateLimiterSecondMiddleware)
 
 
-const limiterAPI = slowDown({
-	windowMs: 120, // 15 minutes
-	delayAfter: 1, // Allow 5 requests per 15 minutes.
-	delayMs: (hits) => hits * 100, // Add 100 ms of delay to every request after the 5th one.
+// const limiterAPI = slowDown({
+// 	windowMs: 120, // 15 minutes
+// 	delayAfter: 1, // Allow 5 requests per 15 minutes.
+// 	delayMs: (hits) => hits * 100, // Add 100 ms of delay to every request after the 5th one.
 
-})
+// })
 
-// Apply the delay middleware to all requests.
-app.use(limiterAPI)
+// // Apply the delay middleware to all requests.
+// app.use(limiterAPI)
 
 
 // const limiterFlexible = new RateLimiterMemory({
@@ -291,7 +301,17 @@ function regionToContinent(region) {
 }
 
 // Enable CORS middleware
-app.use(cors());
+const corsOptions = {
+    origin: 'https://lolvue.vercel.app/',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204
+  };
+  
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions)); // Enable pre-flight across-the-board
 
 // Define a sample route
 app.get('/', (req, res) => {
@@ -300,8 +320,11 @@ app.get('/', (req, res) => {
 
 // Define a sample route
 app.get('/tokens', async (req, res) => {
-    rateLimiter.consume(10)
-    res.json('Hello from tokens page! consuming 10 rates');
+    //rateLimiter.consume(10)
+    //rateLimiter.consume("Api Points", 10)
+    await limiterQueue.removeTokens(10);
+    //limiterQueue.removeTokens(5)
+    res.json('Hello from tokens page!');
 });
 
 // heavy on api, probably problems with api throttling
