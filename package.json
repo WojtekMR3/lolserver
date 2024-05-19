@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node index.js",
-    "server": "nodemon index.js"
+    "dev": "nodemon index.js"
   },
   "name": "lolserver",
   "version": "1.0.0",

@@ -30,7 +30,7 @@ const limiterFlexible = new RateLimiterMemory({
   });
   
 const limiterQueue = new RateLimiterQueue(limiterFlexible, {
-    maxQueueSize: 40,
+    maxQueueSize: 41,
 });
 
 // LOL API Official limit: 100r/2mins n 20r/s
@@ -309,7 +309,7 @@ function regionToContinent(region) {
 const corsOptions = {
     origin: (origin, callback) => {
       // List of allowed origins
-      const allowedOrigins = ['https://lolvue.vercel.app', 'https://lolvue-r3flexmlgs-projects.vercel.app/', 'https://lolvue-n4ni1l2ry-r3flexmlgs-projects.vercel.app', 'http://localhost:54545'];
+      const allowedOrigins = ['https://lolvue.vercel.app', 'https://lolvue-r3flexmlgs-projects.vercel.app', 'http://localhost:54545'];
   
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
