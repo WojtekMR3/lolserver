@@ -306,30 +306,30 @@ function regionToContinent(region) {
 //     origin: 'https://lolvue.vercel.app'
 // };
 
-// const corsOptions = {
-//     origin: (origin, callback) => {
-//       // List of allowed origins
-//       const allowedOrigins = ['https://lolvue.vercel.app', 'https://lolvue-r3flexmlgs-projects.vercel.app/', 'https://lolvue-n4ni1l2ry-r3flexmlgs-projects.vercel.app', 'http://localhost:54545'];
+const corsOptions = {
+    origin: (origin, callback) => {
+      // List of allowed origins
+      const allowedOrigins = ['https://lolvue.vercel.app', 'https://lolvue-r3flexmlgs-projects.vercel.app/', 'https://lolvue-n4ni1l2ry-r3flexmlgs-projects.vercel.app', 'http://localhost:54545'];
   
-//       // Allow requests with no origin (like mobile apps or curl requests)
-//       if (!origin) return callback(null, true);
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
   
-//       // Check if the origin is in the list of allowed origins
-//       if (allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error('Not allowed by CORS'));
-//       }
-//     },
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//     credentials: true,
-//     optionsSuccessStatus: 204
-//   };
+      // Check if the origin is in the list of allowed origins
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204
+  };
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
-// app.options('*', cors(corsOptions)); // Enable pre-flight across-the-board
+app.options('*', cors(corsOptions)); // Enable pre-flight across-the-board
 
 // Define a sample route
 app.get('/', (req, res) => {
@@ -522,3 +522,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
+
+module.exports = app;
