@@ -309,7 +309,7 @@ function regionToContinent(region) {
 const corsOptions = {
     origin: (origin, callback) => {
       // List of allowed origins
-      const allowedOrigins = ['http://localhost:54545', 'https://lolvue.vercel.app', 'http://lolvue.vercel.app'];
+      const allowedOrigins = ['http://localhost:54545', 'https://lolvue.vercel.app', 'https://lolvue-n4ni1l2ry-r3flexmlgs-projects.vercel.app'];
   
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
