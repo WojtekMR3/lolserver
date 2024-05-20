@@ -337,6 +337,12 @@ app.get('/', (req, res) => {
 });
 
 // Define a sample route
+app.get('/api/hello', (req, res) => {
+    res.json('Hello from api routes!');
+});
+
+
+// Define a sample route
 app.get('/tokens', async (req, res) => {
     //rateLimiter.consume(10)
     //rateLimiter.consume("Api Points", 10)
