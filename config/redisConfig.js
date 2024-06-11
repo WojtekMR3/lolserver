@@ -1,5 +1,7 @@
 const redis = require('redis');
 const { promisify } = require('util');
+const dotenv = require('dotenv');
+dotenv.config();
 // const redisClient = redis.createClient()
 // const redisClient = redis.createClient({
 //     host: '127.0.0.1',
@@ -7,7 +9,7 @@ const { promisify } = require('util');
 // });
 
 const redisClient = redis.createClient({
-    password: 'ulw4JjiNbkoM3vxnDxomHZg9rSMU71W1',
+    password: process.env.REDIS_PASS,
     socket: {
         host: 'redis-16627.c328.europe-west3-1.gce.redns.redis-cloud.com',
         port: 16627
