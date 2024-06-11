@@ -1,7 +1,6 @@
 const riotAPI = require('../lib/riotAPI.js');
 const redisClient = require('../config/redisConfig.js');
 
-const postgres = require('../config/postgres.js');
 const pg = require('../config/pg.js');
 
 const controllerSample = {

@@ -13,11 +13,11 @@ dotenv.config();
 // console.log(await pool.query('SELECT NOW()'))
  
 const client = new Client({
-	user: 'postgres.ykgmummfdcauqvwkjghc',
+	user: process.env.SUPABASE_USERNAME,
 	password: process.env.SUPABASE_PASS,
-	host: 'aws-0-eu-central-1.pooler.supabase.com',
-	port: 6543,
-	database: 'postgres',
+	host: process.env.SUPABASE_HOST,
+	port: process.env.SUPABASE_PORT,
+	database: process.env.SUPABASE_DATABASE,
 })
  
 client.connect();
