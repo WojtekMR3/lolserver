@@ -62,7 +62,7 @@ const controllerSample = {
             const insertUser = {
                 //name: 'fetch-user',
                 text: 'INSERT INTO users (name, tag, riot_id) VALUES ($1, $2, $3) RETURNING *',
-                values: [name, tag, summonerRiotID],
+                values: [summoner.data.gameName, summoner.data.tagLine, summonerRiotID],
             }
 
             //const values = [[{matchHistory}], summoner.data.puuid];
