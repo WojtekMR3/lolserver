@@ -2,7 +2,7 @@ const express = require('express');
 require('express-async-errors');
 
 const cors = require('cors');
-const corsOptions = require('../middleware/corsOptions.js');
+const corsOptions = require('./v1/middleware/corsOptions.js');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -11,10 +11,10 @@ const rateLimit = require('express-rate-limit');
 const { RateLimiterMemory, RateLimiterQueue } = require("rate-limiter-flexible");
 const { slowDown } = require('express-slow-down')
 
-const router = require('../router/router')
-const errorHandler = require('../middleware/errorHandler');
-const requestLimiter = require('../middleware/requestLimiter');
-const timelog = require('../middleware/timelog');
+const router = require('./v1/router/router')
+const errorHandler = require('./v1/middleware/errorHandler.js');
+const requestLimiter = require('./v1/middleware/requestLimiter.js');
+const timelog = require('./v1/middleware/timelog.js');
 const responseTime = require('response-time')
 
 const app = express();

@@ -1,5 +1,5 @@
-const riotAPI = require('../lib/riotAPI.js');
-const redisClient = require('../config/redisConfig.js');
+const riotAPI = require('../../lib/riotAPI.js');
+const redisClient = require('../../config/redisConfig.js');
 
 const leagueController = {
 

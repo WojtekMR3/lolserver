@@ -1,7 +1,7 @@
-const riotAPI = require('../lib/riotAPI.js');
-const redisClient = require('../config/redisConfig.js');
+const riotAPI = require('../../lib/riotAPI.js');
+const redisClient = require('../../config/redisConfig.js');
 
-const pg = require('../config/pg.js');
+const pg = require('../../config/pg.js');
 
 const controllerSample = {
     getAcc: async (req, res) => {
@@ -47,7 +47,7 @@ const controllerSample = {
 
         const q2 = {
             //name: 'fetch-user',
-            text: 'SELECT * FROM users WHERE name = $1 AND tag = $2',
+            text: 'SELECT * FROM users WHERE name ILIKE $1 AND tag ILIKE $2',
             values: [name, tag],
         }          
 
@@ -57,6 +57,7 @@ const controllerSample = {
         let summonerRiotID
         if (r2.rows.length == 0) {
             let summoner = await riotAPI.AccByNameTag(name, tag, region)
+            console.log(summoner.data)
             summonerRiotID = summoner.data.puuid
             const insertUser = {
                 //name: 'fetch-user',
@@ -75,12 +76,12 @@ const controllerSample = {
 
         const query = {
             //name: 'fetch-user',
-            text: 'SELECT match_history FROM users WHERE riot_id = $1',
+            text: 'SELECT match_history, updated_at FROM users WHERE riot_id = $1',
             values: [summonerRiotID],
           }          
 
         const result = await pg.query(query)
-        console.log(result.rows[0].match_history)
+        //console.log(result.rows[0].match_history)
         // console.log("rows0 " + JSON.stringify(result.rows[0]))
         //console.log("rows0 " + result.rows[0].match_history[0].matchHistory)
         //let matchHistory = result.rows[0].match_history[0].matchHistory
@@ -88,14 +89,24 @@ const controllerSample = {
 
         //matchHistory = result.rows[0]
         //console.log("retrieving redis data")
-        let matchHistory
-        if (result.rows[0].match_history == 0 || result.rows[0].match_history == null) {
-            console.log("fetching data from riot api")
-            matchHistory = await riotAPI.MatchesByPUUID(summonerRiotID, region)
+        // if (result.rows[0].updated_at - time.now() ) {
 
-            const queryText = 'UPDATE users SET match_history = $1 WHERE riot_id = $2 RETURNING *';
+        // }
+        console.log(result.rows[0].updated_at)
+        let past = new Date(result.rows[0].updated_at)
+        const now = new Date();
+        let secElapsed = Math.floor((now - past) / 1000)
+        console.log(secElapsed)
+
+        let matchHistory
+        if (result.rows[0].match_history == null || secElapsed > 240) {
+            console.log("fetching data from riot api")
+            matchHistory = await riotAPI.MatchesByPUUID(summonerRiotID, region, 10)
+
+            const queryText = 'UPDATE users SET match_history = $1, updated_at = NOW() WHERE riot_id = $2 RETURNING *';
             const values = [[{matchHistory}], summonerRiotID];
-            const res1 = await pg.query(queryText, values);
+            //const res1 =  pg.query(queryText, values);
+            pg.query(queryText, values);
             //console.log(res1)
         } else {
             console.log("fetching data from psql")
@@ -121,7 +132,7 @@ const controllerSample = {
         //     console.log(res1)
         // }
 
-        console.log(matchHistory)
+        //console.log(matchHistory)
 
         matchHistory.length = 10
         //console.log("matchhistory length: " + matchHistory.length)

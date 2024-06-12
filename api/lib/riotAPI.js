@@ -44,10 +44,10 @@ const riotAPI = {
         }
     },
 
-    async MatchesByPUUID(puuid, region) { // Added region parameter
+    async MatchesByPUUID(puuid, region, count) { // Added region parameter
         try {
             const continent = this.regionToContinent(region);
-            const url = `https://${continent}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${API_KEY}`;
+            const url = `https://${continent}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}&api_key=${API_KEY}`;
             const response = await axios.get(url);
             //console.log('MatchesByPUUID: ', response.data);
             return response.data;
